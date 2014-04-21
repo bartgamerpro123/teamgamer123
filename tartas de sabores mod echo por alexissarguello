@@ -1,0 +1,85 @@
+ModPE.setFoodItem(491,"cookie",0,-8,"tarta de fuego");
+Item.addCraftRecipe(491,1,0, [354,1,0,259,1,0]);
+ModPE.setFoodItem(409,"ender_eye",0,20,"tarta de ender");
+Item.addCraftRecipe(409,2,0, [354,1,0,263,10,0,265,1,0]);
+ModPE.setFoodItem(411,"melon_speckled",0,16,"tarta de sandia");
+Item.addCraftRecipe(411,1,0,[354,1,0,360,1,0]);
+ModPE.setFoodItem(412,"carrot_golden",0,14,"tarta de zanahoria");
+Item.addCraftRecipe(412,1,0,[354,1,0,391,1,0]);
+ModPE.setFoodItem(413,"apple_golden",0,15,"tarta de manzana");
+Item.addCraftRecipe(413,1,0,[354,1,0,260,1,0]);
+ModPE.setFoodItem(416,"gold_nugget",0,17,"tarta de cultivo");
+Item.addCraftRecipe(416,1,0,[354,1,0,295,1,0,3,1,0]);
+ModPE.setFoodItem(415,"minecart_chest",0,12,"zanahoria de oro");
+Item.addCraftRecipe(415,1,0,[391,1,0,266,1,0]);
+ModPE.setFoodItem(414,"minecart_tnt",0,14,"manzana de oro");
+Item.addCraftRecipe(414,1,0, [260, 1,0,266,1,0]);
+ModPE.setFoodItem(384,"blaze_powder",0,16,"tarta de hierro");
+Item.addCraftRecipe(384,1,0,[354,1,0,265,1,0]);
+ModPE.setFoodItem(385,"slimeball",0,20,"tarta de diamante");
+Item.addCraftRecipe(385,1,0,[354,1,0,264,1,0]);
+ModPE.setFoodItem(386,"saddle",0,15,"sandia de oro");
+Item.addCraftRecipe(386,1,0,[360,1,0,266,1,0]);
+ModPE.setFoodItem(397,"ruby",0,20,"tarta de oro");
+Item.addCraftRecipe(397,1,0,[354,1,0,266,1,0]);
+
+
+ModPE.overrideTexture("images/items-opaque.png","http://i.imgur.com/OnOAkhS.png");
+
+0// poder tarta de fuego
+// version 0.0.1
+
+function attackHook(attacker, victim)
+ {
+if(getCarriedItem()==491)
+Entity.setFireTicks(victim,20);
+  }
+
+
+0// poder tarta de ender
+// version 0.0.1
+
+var wand = 409; //"the wand", data value for sticks
+var oreIds = [21, 14, 16, 15, 56]; //gold, lapis, coal, iron and diamond ore data values; in order of desirability
+var oreNames = ["Lapis", "Gold", "Coal", "Iron", "Diamond"]; //gold, lapis, coal, iron and diamond ore string values; in order of desirability
+
+function useItem(x,y,z,itemId,blockId,side) {
+	//if item is the wand then continue
+	if(itemId == wand) {
+		bestValue = -1; //variable to hold the best value found. -1 represents no ores being found
+		for(var i = 0;i <= y;i++) {
+			var bestXYZ;
+			var tile = getTile(x, i, z);
+			if (tile == oreIds[0]) {
+				if (bestValue < 0) {
+					bestValue = 0;
+					bestXYZ = ("X: " + x + " Y: " + i + " Z: " + z);
+				}
+			} else if (tile == oreIds[1]) {
+				if (bestValue < 1) {
+					bestValue = 1;
+					bestXYZ = ("X: " + x + " Y: " + i + " Z: " + z);
+				}
+			} else if (tile == oreIds[2]) {
+				if (bestValue < 2) {
+					bestValue = 2;
+					bestXYZ = ("X: " + x + " Y: " + i + " Z: " + z);
+				}
+			} else if (tile == oreIds[3]) {
+				if (bestValue < 3) {
+					bestValue = 3;
+					bestXYZ = ("X: " + x + " Y: " + i + " Z: " + z);
+				}
+			} else if (tile == oreIds[4]) {;
+				bestValue = 4;
+				bestXYZ = ("X: " + x + " Y: " + i + " Z: " + z);
+				break; //diamond is the best, no point looping to find a block that is better
+			}
+		}
+		if(bestValue == -1) {
+			clientMessage("No ores found");
+		} else {
+			clientMessage("Found " + oreNames[bestValue] + " " + bestXYZ);
+		}
+	}
+}
